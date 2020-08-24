@@ -19,8 +19,8 @@
     orientation: 'vertical'
     GridLayout:
         cols:2
-        row_force_default:True
-        row_default_height:40
+        #row_force_default:True
+        #row_default_height:40
         padding:[30,30,30,30]
         spacing:[20,20]
         Label:
@@ -32,16 +32,21 @@
             write_tab: False
             multiline: False
             size_hint_x:0.3
+            size_hint_y:0.1
+            font_size:20
 
         Label:
             text:"Class ID"
             size_hint_x:0.2
+
 
         TextInput:
             id:classid
             write_tab: False
             multiline: False
             size_hint_x:0.3
+            size_hint_y:0.1
+            font_size:20
 
         Label:
             text:"Lesson ID"
@@ -52,22 +57,28 @@
             write_tab: False
             multiline: False
             size_hint_x:0.3
+            size_hint_y:0.1
+            font_size:'20sp'
 
 
 
         Button:
             text: 'Submit'
             size_hint_x:0.2
-            on_release: root.import_lesson()
+            size_hint_y:0.3
+            on_release: root.import_lesson(self)
             background_color:[0.76,0.83,0.86,0.8]
 
         Button:
             text: 'Cancel'
             size_hint_x:0.2
+            size_hint_y:0.3
             on_release: root.close_pop()
             background_color:[0.76,0.83,0.86,0.8]
     Label:
         text: root.text_status
+        size_hint:(1,0.2)
+        text_size:(self.width,None)
 
 
 
@@ -79,9 +90,13 @@
         orientation: 'vertical'
         ActionBar:
             pos_hint: {'top':1}
+
             ActionView:
                 use_separator: True
+
                 ActionPrevious:
+                    app_icon: "lr_logo.png"
+                    on_press:root.launch_website()
                 ActionButton:
                     text: ' Import Lesson '
                     on_press: root.launch_popup()
@@ -91,7 +106,7 @@
             #do_scroll_y: True
             #size_hint: (1, None)
             #size:(800,850)
-            size_hint: (1, .9)
+            size_hint: (1, 1)
             #bar_width: 10
             #bar_color: 1, 0, 0, 1   # red
             #bar_inactive_color: 0, 0, 1, 1   # blue
@@ -114,6 +129,7 @@
                 ActionPrevious:
                     with_previous: True
                     on_release: root.set_previous_screen()
+                    app_icon: "lr_logo.png"
                 ActionButton:
                     text: ' Next '
                     on_release:root.set_next_screen()
@@ -125,11 +141,12 @@
             Label:
                 text: root.text_label_2
                 size_hint: (1,0.1)
-                font_size:20
+                font_size:'25sp'
             Image:
                 source:root.text_image
-                size: 350, 350 / self.image_ratio
+                size: 350, 350/ self.image_ratio
                 size_hint: (1,0.7)
+                allow_stretch: True
             ScrollView:
                 id: scrlv
                 size_hint:(1,0.3)
@@ -137,7 +154,7 @@
                 #TextInput:
                 Label:
                     #size_hint:(1,None)
-                    font_size:18
+                    font_size:'20sp'
                     #foreground_color:[1,1,1,1]
                     background_color:[0.76,0.83,0.86,0.8]
                     #multiline:True
@@ -151,14 +168,14 @@
                     text_size: self.width, None
                     height: self.texture_size[1]
             Button:
-                size_hint : (0.15,0.1)
-                pos_hint : {'x':0.42}
-                text: "Read Aloud"
+                size_hint : (0.25,0.08)
+                pos_hint : {'x':0.37}
+                text: "Read"
                 background_color:[0.76,0.83,0.86,0.8]
-                on_release:root.read_intro()
+                on_release:root.read_intro(self)
 
 <LessonFactualScreen>
-    car : car
+
     BoxLayout:
         orientation: 'vertical'
         ActionBar:
@@ -167,64 +184,52 @@
                 use_separator: True
                 ActionPrevious:
                     with_previous: True
+                    app_icon: "lr_logo.png"
                     on_release: root.set_previous_screen()
                 ActionButton:
                     text: ' Next '
                     on_release:root.set_next_screen()
-        Carousel:
-            id:car
-            on_touch_move: root.slide_moved()
-            BoxLayout:
-                orientation:'vertical'
-                Image:
-                    source:root.text_image_1
-                    size: 400, 400 / self.image_ratio
-                    size_hint: (1,0.7)
-                ScrollView:
-                    size_hint:(1,0.3)
-                    Label:
-                        text:root.text_term_description_1
-                        text_size: self.width, None
-                        #size: self.texture_size
-                        height: self.texture_size[1]
-                        halign:"center"
-                        valign:"top"
 
-            BoxLayout:
-                orientation:'vertical'
-                Image:
-                    size: 400, 400 / self.image_ratio
-                    size_hint: (1,0.7)
-                    source:root.text_image_2
-                ScrollView:
-                    size_hint:(1,0.3)
-                    Label:
-                        size_hint:(1,0.3)
-                        text:root.text_term_description_2
-                        text_size: self.width, None
-                        height: self.texture_size[1]
-                        halign:"center"
-                        valign:"top"
+        BoxLayout:
 
-            BoxLayout:
-                orientation:'vertical'
-                Image:
-                    source:root.text_image_3
-                    size: 400, 400 / self.image_ratio
-                    size_hint: (1,0.7)
-                ScrollView:
-                    size_hint:(1,0.3)
-                    Label:
-                        size_hint:(1,0.3)
-                        text:root.text_term_description_3
-                        text_size: self.width, None
-                        height: self.texture_size[1]
-                        halign:"center"
-                        valign:"top"
+            size_hint:(0.2,0.05)
+            pos_hint:{'x': 0.4,'top':1}
+
+            Button:
+                text: '<'
+                #size_hint:(0.06,0.1)
+                on_press:root.load_previous()
+                height:10
+                width:10
+            Button:
+                text: '>'
+                #size_hint:(0.06,0.1)
+                height:10
+                width:10
+                on_press:root.load_next()
+
+
+        BoxLayout:
+            orientation:'vertical'
+            size_hint:(1,0.5)
+            Image:
+                source:root.text_image_display
+
+            ScrollView:
+                size_hint:(1,0.4)
+                Label:
+                    #size_hint:(1,0.3)
+                    text:root.text_term_description
+                    text_size: self.width, None
+                    font_size: "20sp"
+                    height: self.texture_size[1]
+                    halign:"center"
+                    valign:"top"
+                    size_hint_y: None
         Button:
-            size_hint : (0.15,0.07)
+            size_hint : (0.15,0.04)
             pos_hint : {'x':0.42}
-            text: "Read Aloud"
+            text: "Read"
             background_color:[0.76,0.83,0.86,0.8]
             on_release:root.read_aloud()
 
@@ -241,6 +246,7 @@
                 ActionPrevious:
                     with_previous: True
                     on_release: root.set_previous_screen()
+                    app_icon: "lr_logo.png"
                 ActionButton:
                     text: ' Next '
                     on_release:root.set_next_screen()
@@ -260,16 +266,18 @@
                     id: steps
                     size_hint_y:None
                     height: max(self.minimum_height, scrlv1.height)
-                    Widget:
+
 
             ScrollView:
                 id:scrlv2
                 size_hint: (0.5, 1)
                 BoxLayout:
+                    padding:60
                     orientation:'vertical'
                     size_hint_y:None
                     id:images
                     height: max(self.minimum_height, scrlv2.height)
+
 
 
 <LessonAssessScreen>
@@ -283,18 +291,11 @@
                 ActionPrevious:
                     with_previous: True
                     on_release: root.set_previous_screen()
+                    app_icon: "lr_logo.png"
                 ActionButton:
                     text: ' Done '
                     on_release:root.set_next_screen()
-        ScrollView:
-            id: scrlv1
-            size_hint:(1,0.5)
-            Label:
-                size_hint:(1,None)
-                text:root.text_label_1
-                text_size:(400,None)
-                font_size:20
-                height: self.texture_size[1]
+
 
 
 
@@ -305,17 +306,29 @@
             TextInput:
                 id:txt
                 size_hint:(1,None)
-                font_size:20
+                hint_text:"Key in your answers here"
+                font_size:"20sp"
                 multiline:True
                 text_size: self.width, None
                 height: max(self.minimum_height, scrlv.height)
                 text:root.text_label_2
+
+        ScrollView:
+            id: scrlv1
+            size_hint:(1,0.5)
+            Label:
+                size_hint:(1,None)
+                text:root.text_label_1
+                text_size:(self.width,None)
+                font_size:"20sp"
+                height: self.texture_size[1]
+
         GridLayout:
-            padding:[30,30]
+            padding:[20,20]
             size_hint:(1,0.2)
             cols: 2
             row_force_default:True
-            row_default_height:40
+            row_default_height:"40sp"
             Button:
                 size_hint:(1,0.2)
                 text:"Save"

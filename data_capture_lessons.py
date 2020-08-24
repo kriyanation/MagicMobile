@@ -1,9 +1,8 @@
-import configparser
+
 import os
 import sqlite3
 import traceback
-from pathlib import Path
-from tkinter import messagebox
+
 
 file_root = os.path.abspath(os.path.join(os.getcwd(),".."))
 db = "MagicRoom.db"
