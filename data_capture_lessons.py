@@ -199,3 +199,16 @@ def set_answer(lessonid,answer_key):
     except sqlite3.OperationalError:
         traceback.print_exc()
         return 1
+
+
+def delete_lesson(lesson_id):
+    try:
+        connection = sqlite3.connect(db)
+        cur = connection.cursor()
+        sql = ("delete from Magic_Science_Lessons where Lesson_ID = ?")
+        cur.execute(sql, (lesson_id,))
+        connection.commit()
+        return 0
+    except sqlite3.OperationalError:
+        traceback.print_exc()
+        return 1
