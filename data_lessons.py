@@ -10,7 +10,7 @@ import data_capture_lessons
 
 def import_new_lesson(user,classid,lessonid):
     headers = {'Content-Type': 'application/json'}
-    url = "http://learning-room-285708.el.r.appspot.com/lesson/?username=" + user + "&lesson_id=" + lessonid + "&class_id=" + classid
+    url = "http://learning-room-beta.el.r.appspot.com/lesson/?username=" + user + "&lesson_id=" + lessonid + "&class_id=" + classid
     try:
         response_get = requests.get(url, headers=headers)
         response_object_get = json.loads(response_get.content)

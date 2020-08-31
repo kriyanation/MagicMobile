@@ -80,11 +80,15 @@
         size_hint:(1,0.2)
         text_size:(self.width,None)
 
+<DelSpinnerOption@SpinnerOption>
+    halign: "left"
+    text_size:(300,None)
+
 <DeletePop>
     #text_lessoid: user.text
     auto_dismiss:False
     size_hint:(1,0.5)
-    title:"Delete Lesson"
+    title:"Delete Mini Lesson"
     BoxLayout:
         orientation:"vertical"
         GridLayout:
@@ -94,16 +98,18 @@
             row_force_default:True
             row_default_height:"40dp"
             Label:
-                text: "Select Lesson"
+                text: "Select Mini Lesson"
 
                 text_size: (200,None)
 
             Spinner:
                 id: whatever
                 text: " Select Lesson "
-                                              #default value showed
 
+                halign:"left"                              #default value showed
+                text_size:(300, None)
                 values: root.lesson_list      #list of values to show
+                option_cls: Factory.get("DelSpinnerOption")
                 on_text:
                     root.on_select_lesson(self.text)
                 background_color:[0.76,0.83,0.86,0.8]
@@ -126,7 +132,6 @@
 
 
 
-
 <LessonListScreen>
 
     container: container
@@ -137,17 +142,17 @@
 
             ActionView:
                 use_separator: True
-                title: "sdsd"
+
 
                 ActionPrevious:
                     app_icon: "logo_bg_small.png"
 
                 ActionButton:
-                    text: ' Import Lesson '
+                    text: ' Import Mini Lesson '
                     on_press: root.launch_popup()
                 ActionOverflow:
                     ActionButton:
-                        text: ' Delete Lesson '
+                        text: ' Delete '
 
                         on_press: root.launch_del_popup()
 
@@ -170,6 +175,7 @@
 
 
 <LessonTitleScreen>
+    tl_image:tl_image
     BoxLayout:
         orientation: 'vertical'
         ActionBar:
@@ -192,11 +198,14 @@
                 text: root.text_label_2
                 size_hint: (1,0.1)
                 font_size:'25sp'
+
             Image:
+                id:tl_image
                 source:root.text_image
                 size: 350, 350/ self.image_ratio
                 size_hint: (1,0.7)
                 allow_stretch: True
+
             ScrollView:
                 id: scrlv
                 size_hint:(1,0.3)
@@ -332,6 +341,7 @@
         Label:
             size_hint: (1,0.1)
             text: root.text_no_image
+
         Image:
             source:root.text_image
             #size: 400, 400/ self.image_ratio

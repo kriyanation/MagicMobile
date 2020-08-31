@@ -4,24 +4,25 @@ from functools import partial
 
 from threading import Thread
 
-
+from kivy.animation import Animation
 from kivy.app import App
 from kivy.core.clipboard import Clipboard
-from kivy.properties import ObjectProperty, StringProperty, ListProperty
-from kivy.uix.actionbar import ActionItem
+from kivy.properties import ObjectProperty, StringProperty, ListProperty, NumericProperty
+
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.metrics import Metrics
 
 from kivy.clock import  Clock
 from kivy.uix.image import Image
-from kivy.uix.label import Label
+
 from kivy.uix.popup import Popup
 from kivy.uix.progressbar import ProgressBar
 
 from kivy.uix.screenmanager import ScreenManager, Screen
 from plyer import tts
 from kivy.core.window import Window
+
 
 import data_capture_lessons
 import data_lessons
@@ -56,7 +57,7 @@ class LessonListScreen(Screen):
         self.manager.current ="title"
     def launch_popup(self):
         show = ImportPop()
-        self.popupWindow = Popup(title="Import Lesson", content=show,
+        self.popupWindow = Popup(title="Import Mini Lesson", content=show,
                             size_hint=(1, 0.4),auto_dismiss=False)
         show.set_popupw(self.popupWindow)
         show.set_screen_instance(self)
@@ -76,6 +77,8 @@ class LessonListScreen(Screen):
 
 class DeletePop(Popup):
     lesson_list = ListProperty()
+
+
     selected_lesson = StringProperty()
     status_label = StringProperty()
 
@@ -180,6 +183,7 @@ class LessonTitleScreen(Screen):
     text_label_1 = StringProperty()
     text_label_2 = StringProperty()
     text_image= StringProperty()
+    animation_count = NumericProperty()
 
     def __init__(self,**kwargs):
         super(LessonTitleScreen,self).__init__(**kwargs)
@@ -197,8 +201,33 @@ class LessonTitleScreen(Screen):
         if self.speak_flag == 0:
             tts.speak(self.text_label_1)
         self.speak_flag = 1
+        self.animation_count = 0
         Clock.schedule_once(self.reset_speak_flag,5)
         sb_button.disabled = False
+
+
+    def animate(self,dt):
+        # create an animation object. This object could be stored
+        # and reused each call or reused across different widgets.
+        # += is a sequential step, while &= is in parallel
+        self.animation_count += 1
+        animation = Animation(center_x=self.width/1.7, t='in_quad')
+        animation += Animation(center_x=self.width/2.3,t='in_quad')
+        # animation += Animation(pos=(200, 100), t='out_bounce')
+        # animation &= Animation(size=(500, 500))
+        # animation += Animation(size=(100, 50))
+
+        # apply the animation on the button, passed in the "instance" argument
+        # Notice that default 'click' animation (changing the button
+        # color while the mouse is down) is unchanged.
+        if self.animation_count == 3:
+            animation += Animation(center_x=self.width/2, t='in_quad')
+            animation.start(self.ids.tl_image)
+            self.animation_count = 0
+            return False
+
+        animation.start(self.ids.tl_image)
+
 
     def reset_speak_flag(self,t):
         self.speak_flag = 0
@@ -213,6 +242,8 @@ class LessonTitleScreen(Screen):
             self.text_image = imagepath
         else:
             self.text_image = "placeholder.png"
+        Clock.schedule_interval(self.animate,2)
+
 
 
 
@@ -349,7 +380,7 @@ class LessonApplyScreen(Screen):
     def __init__(self,**kwargs):
         super(LessonApplyScreen, self).__init__(**kwargs)
         Window.bind(on_keyboard=self.on_key)
-        #self.anim = Animation(size=(200, 200), t='in_quad')
+
 
     def on_key(self, window, key, *args):
         if key == 27:  # the esc key
@@ -409,10 +440,15 @@ class LessonApplyScreen(Screen):
         for i in range(len(self.image_list)):
             if self.image_list[i] is not None and self.image_list[i] != "":
                 step_image = Image(source = imagepath+self.image_list[i],size=(200,200))
+                animation = Animation(size_hint = (0.3,0.3), t='in_quad')
+                animation += Animation(size_hint=(1, 1), t='in_quad')
+
                 if (i < 4):
                     img_pop.all_images1.add_widget(step_image)
+                    animation.start(step_image)
                 else:
                     img_pop.all_images2.add_widget(step_image)
+                    animation.start(step_image)
         img_pop.open()
 
     def add_image(self,instance,a,*args):
